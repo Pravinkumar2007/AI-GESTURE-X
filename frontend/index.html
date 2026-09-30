@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>GestureX - AI Gesture Control</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- ============================================================
+     INTRO SCREEN
+     ============================================================ -->
+
+<div
+    id="introScreen"
+    class="intro-screen"
+>
+
+    <div class="intro-content">
+
+        <div class="intro-badge">
+            AI VISION SYSTEM
+        </div>
+
+        <h1>
+            AI Gesture
+            <span>Control</span>
+        </h1>
+
+        <p>
+            A touchless interface powered by
+            real-time computer vision.
+        </p>
+
+
+        <div class="gesture-animation">
+
+            <div class="gesture-item">
+                <div class="gesture-icon">☝️</div>
+                <span>MOVE</span>
+            </div>
+
+            <div class="gesture-item">
+                <div class="gesture-icon">✊</div>
+                <span>LEFT CLICK</span>
+            </div>
+
+            <div class="gesture-item">
+                <div class="gesture-icon">👍</div>
+                <span>VOL +</span>
+            </div>
+
+            <div class="gesture-item">
+                <div class="gesture-icon">👎</div>
+                <span>VOL -</span>
+            </div>
+
+            <div class="gesture-item">
+                <div class="gesture-icon">✌️</div>
+                <span>BRIGHTNESS</span>
+            </div>
+
+            <div class="gesture-item">
+                <div class="gesture-icon">✏️</div>
+                <span>AIR WRITE</span>
+            </div>
+
+        </div>
+
+
+        <div class="loading-line">
+            <div></div>
+        </div>
+
+
+        <p class="initializing">
+            GESTUREX VISION ENGINE READY
+        </p>
+
+    </div>
+
+</div>
+
+
+
+<!-- ============================================================
+     MAIN APPLICATION
+     ============================================================ -->
+
+<div
+    id="mainApp"
+    class="main-app"
+>
+
+
+    <!-- ========================================================
+         TOP BAR
+         ======================================================== -->
+
+    <header class="top-bar">
+
+        <div class="brand">
+
+            <div class="brand-logo">
+                AI
+            </div>
+
+            <div>
+
+                <h2>
+                    GESTURE CONTROL
+                </h2>
+
+                <span>
+                    VISION INTERFACE v2.0
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="system-state">
+
+            <span
+                id="stateDot"
+                class="state-dot"
+            ></span>
+
+            <span id="systemStatus">
+                SYSTEM STANDBY
+            </span>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ========================================================
+         GESTURE STRIP
+         ======================================================== -->
+
+    <section class="gesture-strip">
+
+        <div class="strip-title">
+            AVAILABLE GESTURES
+        </div>
+
+
+        <div class="gesture-list">
+
+            <div class="mini-gesture">
+                <span>☝️</span>
+                <small>MOVE</small>
+            </div>
+
+            <div class="mini-gesture">
+                <span>✊</span>
+                <small>LEFT CLICK</small>
+            </div>
+
+            <div class="mini-gesture">
+                <span>👍</span>
+                <small>VOL +</small>
+            </div>
+
+            <div class="mini-gesture">
+                <span>👎</span>
+                <small>VOL -</small>
+            </div>
+
+            <div class="mini-gesture">
+                <span>✌️</span>
+                <small>BRIGHT -</small>
+            </div>
+
+            <div class="mini-gesture">
+                <span>🤟</span>
+                <small>BRIGHT +</small>
+            </div>
+
+            <div class="mini-gesture">
+                <span>✏️</span>
+                <small>AIR WRITE</small>
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ========================================================
+         DASHBOARD
+         ======================================================== -->
+
+    <main class="dashboard">
+
+
+        <!-- ====================================================
+             CAMERA PANEL
+             ==================================================== -->
+
+        <section class="camera-panel">
+
+
+            <div class="panel-header">
+
+                <div>
+
+                    <span class="panel-label">
+                        LIVE INPUT
+                    </span>
+
+                    <h1>
+                        Camera Feed
+                    </h1>
+
+                </div>
+
+
+                <div class="camera-status">
+
+                    <span id="cameraDot"></span>
+
+                    <span id="cameraStatus">
+                        CAMERA OFF
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 CAMERA CONTAINER
+                 ================================================= -->
+
+            <div
+                class="camera-container"
+                id="cameraContainer"
+            >
+
+
+                <!-- =================================================
+                     BACKGROUND VIDEO
+                     ================================================= -->
+
+                <video
+                    id="backgroundVideo"
+                    class="background-video"
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                >
+
+                    <source
+                        src="VN20260813_102717.mp4"
+                        type="video/mp4"
+                    >
+
+                </video>
+
+
+
+                <!-- =================================================
+                     REAL WEBCAM
+                     ================================================= -->
+
+                <video
+                    id="cameraFeed"
+                    autoplay
+                    muted
+                    playsinline
+                ></video>
+
+
+
+                <!-- =================================================
+                     AIR WRITING CANVAS
+                     ================================================= -->
+
+                <canvas
+                    id="airWritingOverlay"
+                ></canvas>
+
+
+                <!-- =================================================
+                     CAMERA PLACEHOLDER
+                     ================================================= -->
+
+                <div
+                    id="cameraPlaceholder"
+                    class="camera-placeholder"
+                >
+
+                    <div class="camera-symbol">
+                        ◉
+                    </div>
+
+                    <h3>
+                        Camera Offline
+                    </h3>
+
+                    <p>
+                        Press START SYSTEM
+                        to activate vision input.
+                    </p>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     SCAN LINE
+                     ================================================= -->
+
+                <div class="scan-line"></div>
+
+
+
+                <!-- =================================================
+                     CORNERS
+                     ================================================= -->
+
+                <div class="corner top-left"></div>
+
+                <div class="corner top-right"></div>
+
+                <div class="corner bottom-left"></div>
+
+                <div class="corner bottom-right"></div>
+
+
+
+                <!-- =================================================
+                     CAMERA INFORMATION
+                     ================================================= -->
+
+                <div class="camera-info">
+
+                    <span>
+                        ● LIVE VISION
+                    </span>
+
+                    <span>
+                        640 × 480
+                    </span>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     AIR WRITING TOGGLE
+                     ================================================= -->
+
+                <button
+                    id="airWritingToggle"
+                    class="air-writing-toggle"
+                    type="button"
+                >
+
+                    <span
+                        id="pencilIcon"
+                        class="pencil-icon"
+                    >
+                        ✏️
+                    </span>
+
+                    <span id="airWritingToggleText">
+                        AIR WRITING OFF
+                    </span>
+
+                </button>
+
+
+
+                <!-- =================================================
+                     AIR WRITING STATUS
+                     ================================================= -->
+
+                <div
+                    id="airWritingOverlayStatus"
+                    class="air-writing-overlay-status"
+                >
+                    AIR WRITING OFF
+                </div>
+
+            </div>
+
+
+
+            <!-- ====================================================
+                 AIR WRITING CONTROLS
+                 ==================================================== -->
+
+            <div class="air-writing-controls">
+
+
+                <!-- ERASER -->
+
+                <button
+                    id="airEraserButton"
+                    type="button"
+                    class="air-control-btn"
+                >
+                    🧽 ERASER
+                </button>
+
+
+                <!-- CLEAR -->
+
+                <button
+                    id="airClearButton"
+                    type="button"
+                    class="air-control-btn"
+                >
+                    🗑️ CLEAR
+                </button>
+
+
+                <!-- SAVE -->
+
+                <button
+                    id="airSaveButton"
+                    type="button"
+                    class="air-control-btn save"
+                >
+                    💾 SAVE
+                </button>
+
+
+                <!-- COLOR -->
+
+                <label class="air-color-control">
+
+                    <span>
+                        🎨 COLOR
+                    </span>
+
+                    <input
+                        id="airColorPicker"
+                        type="color"
+                        value="#67e8f9"
+                    >
+
+                </label>
+
+
+                <!-- THICKNESS -->
+
+                <label class="air-thickness-control">
+
+                    <span>
+                        📏 THICKNESS:
+                        <strong id="airThicknessValue">
+                            5 px
+                        </strong>
+                    </span>
+
+                    <input
+                        id="airThickness"
+                        type="range"
+                        min="1"
+                        max="30"
+                        value="5"
+                    >
+
+                </label>
+
+            </div>
+
+
+
+            <!-- ====================================================
+                 SYSTEM BUTTONS
+                 ==================================================== -->
+
+            <div class="system-buttons">
+
+                <button
+                    id="startButton"
+                    class="start-button"
+                    type="button"
+                >
+                    ▶ START SYSTEM
+                </button>
+
+
+                <button
+                    id="stopButton"
+                    class="stop-button"
+                    type="button"
+                    disabled
+                >
+                    ■ STOP SYSTEM
+                </button>
+
+            </div>
+
+
+
+            <!-- ====================================================
+                 RECOGNIZED TEXT
+                 ==================================================== -->
+
+            <div class="recognized-text-panel">
+
+                <div class="panel-label">
+                    AIR WRITING
+                </div>
+
+
+                <div
+                    id="recognizedText"
+                    class="recognized-text"
+                >
+                    Pencil mode is OFF
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             RIGHT CONTROL PANEL
+             ===================================================== -->
+
+        <aside class="control-panel">
+
+
+            <!-- =================================================
+                 CURRENT GESTURE
+                 ================================================= -->
+
+            <div class="current-gesture">
+
+                <div class="panel-label">
+                    DETECTED GESTURE
+                </div>
+
+
+                <div
+                    id="gestureIcon"
+                    class="big-gesture"
+                >
+                    ◌
+                </div>
+
+
+                <div
+                    id="gestureName"
+                    class="gesture-name"
+                >
+                    WAITING
+                </div>
+
+
+                <p id="gestureDescription">
+                    Show your hand to the camera
+                </p>
+
+
+                <div class="detection-bar">
+
+                    <div
+                        id="detectionProgress"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 CONTROL MODULES
+                 ================================================= -->
+
+            <div class="control-status">
+
+                <div class="panel-label">
+                    CONTROL MODULES
+                </div>
+
+
+                <!-- MOUSE -->
+
+                <div class="module">
+
+                    <div class="module-icon">
+                        🖱️
+                    </div>
+
+                    <div class="module-info">
+
+                        <strong>
+                            Mouse Control
+                        </strong>
+
+                        <small>
+                            Index Finger
+                        </small>
+
+                    </div>
+
+                    <span class="module-state">
+                        READY
+                    </span>
+
+                </div>
+
+
+                <!-- LEFT CLICK -->
+
+                <div class="module">
+
+                    <div class="module-icon">
+                        ✊
+                    </div>
+
+                    <div class="module-info">
+
+                        <strong>
+                            Left Click
+                        </strong>
+
+                        <small>
+                            Closed Fist
+                        </small>
+
+                    </div>
+
+                    <span class="module-state">
+                        READY
+                    </span>
+
+                </div>
+
+
+                <!-- RIGHT CLICK DISABLED -->
+
+                <div class="module">
+
+                    <div class="module-icon">
+                        🚫
+                    </div>
+
+                    <div class="module-info">
+
+                        <strong>
+                            Right Click
+                        </strong>
+
+                        <small>
+                            Disabled
+                        </small>
+
+                    </div>
+
+                    <span class="module-state">
+                        OFF
+                    </span>
+
+                </div>
+
+
+                <!-- VOLUME -->
+
+                <div class="module">
+
+                    <div class="module-icon">
+                        🔊
+                    </div>
+
+                    <div class="module-info">
+
+                        <strong>
+                            Volume
+                        </strong>
+
+                        <small>
+                            Thumb Gestures
+                        </small>
+
+                    </div>
+
+                    <span class="module-state">
+                        READY
+                    </span>
+
+                </div>
+
+
+                <!-- BRIGHTNESS -->
+
+                <div class="module">
+
+                    <div class="module-icon">
+                        ☀️
+                    </div>
+
+                    <div class="module-info">
+
+                        <strong>
+                            Brightness
+                        </strong>
+
+                        <small>
+                            Finger Gestures
+                        </small>
+
+                    </div>
+
+                    <span class="module-state">
+                        READY
+                    </span>
+
+                </div>
+
+
+                <!-- AIR WRITING -->
+
+                <div class="module">
+
+                    <div class="module-icon">
+                        ✏️
+                    </div>
+
+                    <div class="module-info">
+
+                        <strong>
+                            Air Writing
+                        </strong>
+
+                        <small>
+                            Pencil Toggle
+                        </small>
+
+                    </div>
+
+                    <span
+                        id="airWritingModuleState"
+                        class="module-state"
+                    >
+                        OFF
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 SYSTEM INFORMATION
+                 ================================================= -->
+
+            <div class="quick-status">
+
+                <div class="panel-label">
+                    SYSTEM INFORMATION
+                </div>
+
+
+                <div class="status-row">
+
+                    <span>
+                        Camera
+                    </span>
+
+                    <strong id="cameraInfoStatus">
+                        OFF
+                    </strong>
+
+                </div>
+
+
+                <div class="status-row">
+
+                    <span>
+                        AI Engine
+                    </span>
+
+                    <strong id="aiInfoStatus">
+                        STANDBY
+                    </strong>
+
+                </div>
+
+
+                <div class="status-row">
+
+                    <span>
+                        Air Writing
+                    </span>
+
+                    <strong id="airWritingInfoStatus">
+                        OFF
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </main>
+
+
+
+    <!-- ========================================================
+         FOOTER
+         ======================================================== -->
+
+    <footer>
+
+        <span>
+            AI GESTURE CONTROL
+        </span>
+
+        <span>
+            COMPUTER VISION • MEDIAPIPE • OPENCV
+        </span>
+
+        <span>
+            LOCAL PROCESSING
+        </span>
+
+    </footer>
+
+</div>
+
+
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+
+<script src="script.js"></script>
+
+</body>
+</html>
